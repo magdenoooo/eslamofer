@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
+import dynamic from "next/dynamic";
 import { 
   FiUsers, 
   FiShoppingBag, 
@@ -10,10 +11,15 @@ import {
   FiBarChart2,
   FiPieChart
 } from "react-icons/fi";
-import { Bar, Pie } from "react-chartjs-2";
-import { Chart as ChartJS, registerables } from 'chart.js';
-ChartJS.register(...registerables);
 import { getApiUrl } from '../../utils/api';
+
+// Dynamically import Chart components to avoid SSR issues
+const Bar = dynamic(() => import('react-chartjs-2').then(mod => ({ default: mod.Bar })), {
+  ssr: false
+});
+const Pie = dynamic(() => import('react-chartjs-2').then(mod => ({ default: mod.Pie })), {
+  ssr: false
+});
 
 export default function AdminDashboard() {
   const [stats, setStats] = useState({
@@ -25,6 +31,16 @@ export default function AdminDashboard() {
     conversion: 0
   });
   const [loading, setLoading] = useState(true);
+
+  // Register Chart.js components on client side only
+  useEffect(() => {
+    const registerChartJS = async () => {
+      const { Chart, registerables } = await import('chart.js');
+      Chart.register(...registerables);
+    };
+    
+    registerChartJS();
+  }, []);
 
   useEffect(() => {
     const fetchStats = async () => {
