@@ -27,7 +27,7 @@ const Footer = () => {
     const fetchPopularStores = async () => {
       try {
         const response = await fetch(
-          getApiUrl('/Store/GetBastStores/Bast')
+          getApiUrl('/Store/GetAllStores')
         );
         const data = await response.json();
         setPopularStores(data.slice(0, 6));
