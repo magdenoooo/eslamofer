@@ -19,9 +19,21 @@ const Navbar = () => {
 
   // جلب بيانات المتاجر مرة واحدة
   useEffect(() => {
-    fetch(getApiUrl('/Store/GetAllStores'))
-      .then((res) => res.json())
-      .then((data) => setStores(data));
+    const fetchStores = async () => {
+      try {
+        const response = await fetch(getApiUrl('/Store/GetAllStores'));
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        setStores(Array.isArray(data) ? data : []);
+      } catch (error) {
+        console.error('Failed to fetch stores:', error);
+        setStores([]);
+      }
+    };
+    
+    fetchStores();
   }, []);
 
   // فلترة النتائج عند الكتابة
