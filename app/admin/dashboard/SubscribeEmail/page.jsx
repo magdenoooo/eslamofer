@@ -2,8 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-
-const API_BASE_URL = 'https://api.eslamoffers.com/api';
+import { getApiUrl } from '../../../utils/api';
 
 const SubscribeEmailPage = () => {
   const [emails, setEmails] = useState([]);
@@ -16,7 +15,7 @@ const SubscribeEmailPage = () => {
 
   const fetchEmails = async () => {
     try {
-      const response = await axios.get(`${API_BASE_URL}/SubscribeEmail/GetAllEmails`);
+      const response = await axios.get(getApiUrl('/SubscribeEmail/GetAllEmails'));
       setEmails(response.data);
       setLoading(false);
     } catch (err) {

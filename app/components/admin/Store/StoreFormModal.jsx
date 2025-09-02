@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect, useRef } from "react";
 import { FiXCircle, FiImage, FiTrash2, FiPlus, FiChevronDown, FiChevronUp, FiEdit2, FiCheck, FiX, FiArrowLeft, FiArrowRight } from "react-icons/fi";
+import { getApiUrl, getUploadsUrl } from '../../../utils/api';
 
 const StoreFormModal = ({ isOpen, onClose, onSubmit, initialData, loading }) => {
   const [formData, setFormData] = useState({
@@ -45,7 +46,7 @@ const StoreFormModal = ({ isOpen, onClose, onSubmit, initialData, loading }) => 
       
       setIsLoadingCategories(true);
       try {
-        const response = await fetch("https://api.eslamoffers.com/api/Category/GetAllCategories");
+        const response = await fetch(getApiUrl('/Category/GetAllCategories'));
         if (!response.ok) throw new Error("Failed to fetch categories");
         const data = await response.json();
         setCategoriesList(Array.isArray(data) ? data : []);
@@ -64,7 +65,7 @@ const StoreFormModal = ({ isOpen, onClose, onSubmit, initialData, loading }) => 
     const loadTags = async () => {
       try {
         if (!isOpen || !initialData?.id) return;
-        const res = await fetch(`https://api.eslamoffers.com/api/Store/GetStoreTags/${initialData.id}`);
+        const res = await fetch(getApiUrl(`/Store/GetStoreTags/${initialData.id}`));
         if (!res.ok) return;
         const data = await res.json();
         if (Array.isArray(data)) {
@@ -196,7 +197,7 @@ const StoreFormModal = ({ isOpen, onClose, onSubmit, initialData, loading }) => 
   const getImageSrc = (url) => {
     if (!url) return null;
     if (url.startsWith('blob:') || url.startsWith('data:')) return url;
-    return `https://api.eslamoffers.com/uploads/${url}`;
+    return getUploadsUrl(url);
   };
 
   if (!isOpen) return null;

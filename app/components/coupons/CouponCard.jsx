@@ -4,6 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import { FiCopy, FiCheck, FiX, FiClock } from "react-icons/fi";
 import Link from "next/link";
+import { getApiUrl, getUploadsUrl } from '../../utils/api';
 
 const CouponCard = ({
   coupon,
@@ -17,7 +18,7 @@ const CouponCard = ({
   const handleCopy = () => {
     navigator.clipboard.writeText(coupon.couponCode);
     setIsCopied(true);
-    fetch(`https://api.eslamoffers.com/api/Coupons/NumberUsed/${coupon.id}`, {
+    fetch(getApiUrl(`/Coupons/NumberUsed/${coupon.id}`), {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -35,7 +36,7 @@ const CouponCard = ({
     ) {
       return coupon.imageUrl;
     }
-    return `https://api.eslamoffers.com/uploads/${coupon.imageUrl}`;
+    return getUploadsUrl(coupon.imageUrl);
   };
 
   const isExpired =

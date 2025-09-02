@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import { FaAngleDoubleLeft } from "react-icons/fa";
 import { MdEmail } from "react-icons/md";
+import { getApiUrl } from '../../../utils/api';
 
 const animatedEmails = [
   { size: 60, className: "-rotate-12 animate-bounce", color: "text-yellow-400", style: "-top-5 right-0 z-10", animation: "animate-bounce" },
@@ -26,7 +27,7 @@ const SubscribeBox = () => {
     }
 
     try {
-      const response = await fetch('https://api.eslamoffers.com/api/SubscribeEmail/AddSubscribeEmail', {
+      const response = await fetch(getApiUrl('/SubscribeEmail/AddSubscribeEmail'), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

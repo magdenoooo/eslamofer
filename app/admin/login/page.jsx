@@ -4,6 +4,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import { getApiUrl } from '../../utils/api';
 
 export default function AdminLogin() {
   const [email, setEmail] = useState("");
@@ -20,7 +21,7 @@ export default function AdminLogin() {
     setError("");
 
     try {
-      const res = await fetch("https://api.eslamoffers.com/api/Authenticate/Login", {
+      const res = await fetch(getApiUrl('/Authenticate/Login'), {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

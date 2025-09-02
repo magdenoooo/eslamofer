@@ -9,6 +9,7 @@ import {
   FaMapMarkerAlt,
   FaWhatsapp,
 } from "react-icons/fa";
+import { getApiUrl } from '../utils/api';
 
 export default function ContactPage() {
   const [showWhatsApp, setShowWhatsApp] = useState(false);
@@ -45,7 +46,7 @@ export default function ContactPage() {
     setSubmitStatus(null);
 
     try {
-      const response = await fetch('https://api.eslamoffers.com/api/Feedback/AddMessage', {
+      const response = await fetch(getApiUrl('/Feedback/AddMessage'), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -2,9 +2,9 @@
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { getApiUrl, getUploadsUrl } from '../utils/api';
 
 const getSafeIconUrl = (iconUrl) => {
-    const baseUrl = 'https://api.eslamoffers.com/uploads/';
     if (!iconUrl) return '/logo.png';
     
     try {
@@ -14,7 +14,7 @@ const getSafeIconUrl = (iconUrl) => {
         }
     } catch (_) {}
     
-    const fullUrl = iconUrl.startsWith('/') ? `${baseUrl}${iconUrl}` : `${baseUrl}/${iconUrl}`;
+    const fullUrl = getUploadsUrl(iconUrl);
     try {
         const url = new URL(fullUrl);
         if (url.protocol === 'http:' || url.protocol === 'https:') {
@@ -32,7 +32,7 @@ const AllCategoriesPage = () => {
     useEffect(() => {
         const fetchCategories = async () => {
             try {
-                const response = await fetch('https://api.eslamoffers.com/api/Category/GetAllCategories');
+                const response = await fetch(getApiUrl('/Category/GetAllCategories'));
                 if (!response.ok) throw new Error('Failed to fetch categories');
                 const data = await response.json();
                 setCategories(data);

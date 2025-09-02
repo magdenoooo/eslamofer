@@ -4,6 +4,7 @@ import OfferTable from "../../../components/admin/Offer/OfferTable";
 import OfferFormModal from "../../../components/admin/Offer/OfferFormModal";
 import ConfirmDialog from "../../../components/admin/Offer/ConfirmDialog";
 import Toast from "../../../components/admin/Offer/Toast";
+import { getApiUrl } from '../../../utils/api';
 
 const OffersPage = () => {
   const [offers, setOffers] = useState([]);
@@ -13,8 +14,6 @@ const OffersPage = () => {
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
   const [offerToDelete, setOfferToDelete] = useState(null);
   const [toast, setToast] = useState(null);
-
-  const API_URL = "https://api.eslamoffers.com/api/Offers";
 
   // دالة للحصول على التوكن من الكوكيز
   const getTokenFromCookies = () => {
@@ -60,7 +59,7 @@ const OffersPage = () => {
   const fetchOffers = async () => {
     setLoading(true);
     try {
-      const response = await fetch(`${API_URL}/GetAllOffers`, {
+      const response = await fetch(getApiUrl('/Offers/GetAllOffers'), {
         headers: {
           Authorization: `Bearer ${getTokenFromCookies()}`,
           Accept: "application/json",
@@ -107,8 +106,8 @@ const OffersPage = () => {
 
     try {
       const url = selectedOffer
-        ? `${API_URL}/UpdateOffer/${selectedOffer.id}`
-        : `${API_URL}/AddOffer`;
+        ? getApiUrl(`/Offers/UpdateOffer/${selectedOffer.id}`)
+        : getApiUrl('/Offers/AddOffer');
 
       const method = selectedOffer ? "PUT" : "POST";
 
@@ -163,7 +162,7 @@ const OffersPage = () => {
 
     try {
       const response = await fetch(
-        `${API_URL}/DeleteOffer/${offerToDelete.id}`,
+        getApiUrl(`/Offers/DeleteOffer/${offerToDelete.id}`),
         {
           method: "DELETE",
           headers: {

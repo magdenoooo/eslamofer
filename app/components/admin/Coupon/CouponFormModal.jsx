@@ -12,6 +12,7 @@ import {
   FiCheckSquare,
   FiStar,
 } from "react-icons/fi";
+import { getUploadsUrl } from '../../../utils/api';
 
 const CouponFormModal = ({
   isOpen,
@@ -123,7 +124,7 @@ const CouponFormModal = ({
     if (!initialData?.imageUrl) {
       setFormData(prev => ({ ...prev, imageUrl: "" }));
     }
-  };
+    setImagePreview(initialData.imageUrl ? getUploadsUrl(initialData.imageUrl) : "");
 
   const handleDragOver = (e) => {
     e.preventDefault();

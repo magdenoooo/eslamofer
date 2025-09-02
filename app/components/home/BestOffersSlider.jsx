@@ -6,11 +6,12 @@ import "swiper/css";
  import Link from "next/link";
 import OfferCard from "../offers/OfferCard";
 import OfferCodeModal from "../offers/OfferCodeModal";
+import { getApiUrl } from '../../utils/api';
 
 const fetchBestOffers = async () => {
   try {
     const res = await fetch(
-      "https://api.eslamoffers.com/api/Offers/GetBestOffers/best"
+      getApiUrl('/Offers/GetBestOffers/best')
     );
     if (!res.ok) throw new Error("Failed to fetch offers");
     const data = await res.json();
@@ -48,7 +49,7 @@ const BestOffersSlider = () => {
       setIsCopied(true);
       
       // تحديث آخر استخدام للكود عند النسخ
-      fetch(`https://api.eslamoffers.com/api/Offers/UpdateLastUse/${modalOffer.id}`, {
+      fetch(getApiUrl(`/Offers/UpdateLastUse/${modalOffer.id}`), {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json'

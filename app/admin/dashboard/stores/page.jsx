@@ -7,8 +7,7 @@ import ConfirmDialog from "../../../components/admin/Store/ConfirmDialog";
 import Toast from "../../../components/admin/Store/Toast";
 import { useRouter } from "next/navigation";
 import { FiPlus, FiSearch } from "react-icons/fi";
-
-const API_BASE = "https://api.eslamoffers.com/api/Store";
+import { getApiUrl, getUploadsUrl } from '../../../utils/api';
 
 const Spinner = () => (
   <div className="flex justify-center items-center min-h-[300px]">
@@ -59,7 +58,7 @@ const StoresPage = () => {
     setLoading(true);
     setError(null);
     try {
-      const res = await fetch(`${API_BASE}/GetAllStores`, {
+      const res = await fetch(getApiUrl('/Store/GetAllStores'), {
         headers: {
           accept: "*/*",
           Authorization: `Bearer ${token}`,
@@ -129,8 +128,8 @@ const StoresPage = () => {
     setError(null);
     try {
       const url = isEditing 
-        ? `${API_BASE}/UpdateStore/${editStore.id}`
-        : `${API_BASE}/AddStore`;
+        ? getApiUrl(`/Store/UpdateStore/${editStore.id}`)
+        : getApiUrl('/Store/AddStore');
 
       const res = await fetch(url, {
         method: isEditing ? "PUT" : "POST",
@@ -154,7 +153,7 @@ const StoresPage = () => {
       try {
         const storeId = data?.id || editStore?.id;
         if (storeId && tags && tags.trim().length > 0) {
-          const tagsCheck = await fetch(`${API_BASE}/GetStoreTags/${storeId}`, {
+          const tagsCheck = await fetch(getApiUrl(`/Store/GetStoreTags/${storeId}`), {
             headers: { accept: '*/*', Authorization: `Bearer ${token}` },
           });
           let hasTags = false;
@@ -163,7 +162,7 @@ const StoresPage = () => {
             hasTags = Array.isArray(existing) && existing.length > 0;
           }
           if (!hasTags) {
-            await fetch(`${API_BASE}/AddTagsToStore?storeId=${storeId}&tags=${encodeURIComponent(tags.trim())}`, {
+            await fetch(getApiUrl(`/Store/AddTagsToStore?storeId=${storeId}&tags=${encodeURIComponent(tags.trim())}`), {
               method: 'POST',
               headers: { accept: '*/*', Authorization: `Bearer ${token}` },
             });
@@ -192,7 +191,7 @@ const StoresPage = () => {
     setConfirmLoading(true);
     setError(null);
     try {
-      const res = await fetch(`${API_BASE}/DeleteStore/${storeToDelete.id}`, {
+      const res = await fetch(getApiUrl(`/Store/DeleteStore/${storeToDelete.id}`), {
         method: "DELETE",
         headers: {
           accept: "*/*",

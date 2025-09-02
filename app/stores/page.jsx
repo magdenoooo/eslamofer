@@ -12,6 +12,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/free-mode";
 import { FreeMode } from "swiper/modules";
+import { getApiUrl, getUploadsUrl } from '../utils/api';
 
 const StoreCardSkeleton = () => (
   <div className="bg-white shadow-lg rounded-lg overflow-hidden border-2 border-dashed border-gray-200 animate-pulse">
@@ -27,7 +28,7 @@ const StoreCard = ({ store }) => {
   const getLogoSrc = () => {
     if (!store.logoUrl) return "/logo4.png";
     if (store.logoUrl.startsWith("http")) return store.logoUrl;
-    return `https://api.eslamoffers.com/uploads/${store.logoUrl}`;
+    return getUploadsUrl(store.logoUrl);
   };
 
   return (
@@ -69,8 +70,8 @@ const StoresPage = () => {
         setLoading(true);
 
         const [storesRes, categoriesRes] = await Promise.all([
-          axios.get("https://api.eslamoffers.com/api/Store/GetAllStores"),
-          axios.get("https://api.eslamoffers.com/api/Category/GetAllCategories"),
+          axios.get(getApiUrl('/Store/GetAllStores')),
+          axios.get(getApiUrl('/Category/GetAllCategories')),
         ]);
 
         const sortedStores = storesRes.data.sort((a, b) => {

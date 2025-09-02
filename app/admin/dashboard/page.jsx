@@ -13,6 +13,7 @@ import {
 import { Bar, Pie } from "react-chartjs-2";
 import { Chart as ChartJS, registerables } from 'chart.js';
 ChartJS.register(...registerables);
+import { getApiUrl } from '../../utils/api';
 
 export default function AdminDashboard() {
   const [stats, setStats] = useState({
@@ -31,15 +32,15 @@ export default function AdminDashboard() {
         setLoading(true);
         
         // جلب عدد المتاجر
-        const storesRes = await fetch('https://api.eslamoffers.com/api/Store/GetAllStores');
+        const storesRes = await fetch(getApiUrl('/Store/GetAllStores'));
         const storesData = await storesRes.json();
         
         // جلب عدد الكوبونات
-        const couponsRes = await fetch('https://api.eslamoffers.com/api/Coupons/GetAllCoupons');
+        const couponsRes = await fetch(getApiUrl('/Coupons/GetAllCoupons'));
         const couponsData = await couponsRes.json();
         
         // جلب عدد العروض
-        const offersRes = await fetch('https://api.eslamoffers.com/api/Offers/GetAllOffers');
+        const offersRes = await fetch(getApiUrl('/Offers/GetAllOffers'));
         const offersData = await offersRes.json();
         
         setStats({

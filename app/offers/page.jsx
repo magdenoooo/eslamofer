@@ -2,13 +2,14 @@ import OfferGrid from "../components/offers/OfferGrid";
 import PromoCard from "../components/home/Coupon/PromoCard";
 import CountdownOfferBox from "../components/home/Coupon/CountdownOfferBox";
 import BestStores from "../components/home/BestStores";
+import { getApiUrl } from '../utils/api';
 
 async function getOffers() {
   try {
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), 8000); // 8 ثواني فقط
 
-    const res = await fetch("https://api.eslamoffers.com/api/Offers/GetAllOffers", {
+    const res = await fetch(getApiUrl('/Offers/GetAllOffers'), {
       next: { revalidate: 60 },
       signal: controller.signal,
     });

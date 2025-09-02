@@ -6,9 +6,7 @@ import CouponFormModal from "../../../components/admin/Coupon/CouponFormModal";
 import ConfirmDialog from "../../../components/admin/Store/ConfirmDialog";
 import Toast from "../../../components/admin/Store/Toast";
 import { FiPlus, FiArrowRight, FiSearch } from "react-icons/fi";
-
-const API_BASE = "https://api.eslamoffers.com/api/Coupons";
-const CATEGORY_API_URL = "https://api.eslamoffers.com/api/Category";
+import { getApiUrl } from '../../../utils/api';
 
 const getTokenFromCookies = () => {
   if (typeof window === 'undefined') return '';
@@ -57,7 +55,7 @@ const CouponsPageContent = () => {
     setError(null);
     try {
       const token = getTokenFromCookies();
-      const res = await fetch(`${API_BASE}/GetCouponsByStore/${storeId}`, {
+      const res = await fetch(getApiUrl(`/Coupons/GetCouponsByStore/${storeId}`), {
         headers: { "Authorization": `Bearer ${token}` }
       });
       if (!res.ok) throw new Error("فشل في جلب الكوبونات");
@@ -74,7 +72,7 @@ const CouponsPageContent = () => {
     if (!storeId) return;
     try {
       const token = getTokenFromCookies();
-      const res = await fetch(`https://api.eslamoffers.com/api/Store/GetStoreBySlug/${storeId}`, {
+      const res = await fetch(getApiUrl(`/Store/GetStoreBySlug/${storeId}`), {
         headers: { "Authorization": `Bearer ${token}` }
       });
       if (!res.ok) throw new Error("فشل في جلب معلومات المتجر");
@@ -87,7 +85,7 @@ const CouponsPageContent = () => {
 
   const fetchCategories = async () => {
     try {
-      const res = await fetch(`${CATEGORY_API_URL}/GetAllCategories`);
+      const res = await fetch(getApiUrl('/Category/GetAllCategories'));
       if (!res.ok) throw new Error("فشل في جلب الفئات");
       const data = await res.json();
       setCategories(Array.isArray(data) ? data : []);
@@ -144,7 +142,7 @@ const CouponsPageContent = () => {
       
       if (editCoupon) {
         // Update existing coupon
-        res = await fetch(`${API_BASE}/UpdateCoupon/${editCoupon.id}`, {
+        res = await fetch(getApiUrl(`/Coupons/UpdateCoupon/${editCoupon.id}`), {
           method: "PUT",
           headers: { "Authorization": `Bearer ${token}` },
           body: formData,
@@ -153,7 +151,7 @@ const CouponsPageContent = () => {
         setToast({ message: "تم تعديل الكوبون بنجاح!", type: "success" });
       } else {
         // Create new coupon
-        res = await fetch(`${API_BASE}/AddCoupon`, {
+        res = await fetch(getApiUrl('/Coupons/AddCoupon'), {
           method: "POST",
           headers: { "Authorization": `Bearer ${token}` },
           body: formData,
@@ -178,7 +176,7 @@ const CouponsPageContent = () => {
     setConfirmLoading(true);
     try {
       const token = getTokenFromCookies();
-      const res = await fetch(`${API_BASE}/DeleteCoupons/${couponToDelete.id}`, {
+      const res = await fetch(getApiUrl(`/Coupons/DeleteCoupons/${couponToDelete.id}`), {
         method: "DELETE",
         headers: { "Authorization": `Bearer ${token}` },
       });

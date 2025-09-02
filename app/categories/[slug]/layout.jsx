@@ -1,8 +1,8 @@
 // Server layout for dynamic category metadata (title, description, keywords)
+import { getApiUrl } from '../../utils/api';
 
 export async function generateMetadata({ params }) {
   const slug = params?.slug;
-  const API_BASE = "https://api.eslamoffers.com/api";
 
   let title = "Eslam Offers";
   let description = "أفضل العروض والخصومات على الإنترنت";
@@ -14,7 +14,7 @@ export async function generateMetadata({ params }) {
 
   try {
     // Get all categories and find the one with matching slug
-    const categoriesRes = await fetch(`${API_BASE}/Category/GetAllCategories`, {
+    const categoriesRes = await fetch(getApiUrl('/Category/GetAllCategories'), {
       cache: "no-store",
       next: { revalidate: 60 },
     });
@@ -36,7 +36,7 @@ export async function generateMetadata({ params }) {
         // Attempt to load tags to append to keywords
         try {
           if (category.id) {
-            const tagsRes = await fetch(`${API_BASE}/Category/GetCategoryTags/${category.id}`, {
+            const tagsRes = await fetch(getApiUrl(`/Category/GetCategoryTags/${category.id}`), {
               cache: "no-store",
               next: { revalidate: 60 },
             });

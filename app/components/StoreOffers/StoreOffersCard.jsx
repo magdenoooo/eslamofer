@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { getUploadsUrl } from '../../utils/api';
 
 const StoreOffersCard = ({ offer }) => {
   const getImageSrc = () => {
@@ -9,7 +10,7 @@ const StoreOffersCard = ({ offer }) => {
     if (offer.logoUrl.startsWith("http") || offer.logoUrl.startsWith("https")) {
       return offer.logoUrl;
     }
-    return `https://api.eslamoffers.com/uploads/${offer.logoUrl}`;
+    return getUploadsUrl(offer.logoUrl);
   };
 
   const getStoreInternalLink = () => {

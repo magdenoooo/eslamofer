@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { FiEdit2, FiTrash2, FiChevronDown, FiChevronUp, FiList } from "react-icons/fi";
 import { RiCoupon3Line } from "react-icons/ri";
+import { getApiUrl, getUploadsUrl } from '../../../utils/api';
 
 const StoreTable = ({ stores, onEdit, onDelete, onNavigateToCoupons, onManageDescriptions, loading }) => {
   const [categories, setCategories] = useState([]);
@@ -10,7 +11,7 @@ const StoreTable = ({ stores, onEdit, onDelete, onNavigateToCoupons, onManageDes
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await fetch("https://api.eslamoffers.com/api/Category/GetAllCategories");
+        const response = await fetch(getApiUrl('/Category/GetAllCategories'));
         const data = await response.json();
         setCategories(Array.isArray(data) ? data : []);
       } catch (error) {
@@ -77,7 +78,7 @@ const StoreTable = ({ stores, onEdit, onDelete, onNavigateToCoupons, onManageDes
                       <div className="flex-shrink-0 h-12 w-12">
                         <img
                           className="h-12 w-12 rounded-lg object-contain border border-gray-200 bg-white shadow-sm"
-                          src={store.logoUrl ? `https://api.eslamoffers.com/uploads/${store.logoUrl}` : "/default-store.png"}
+                          src={store.logoUrl ? getUploadsUrl(store.logoUrl) : "/default-store.png"}
                           alt={store.altText || store.name}
                         />
                       </div>

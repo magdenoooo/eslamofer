@@ -7,10 +7,11 @@ import Link from "next/link";
 import { FiArrowLeft } from "react-icons/fi";
 import CouponCodeModal from "./Coupon/CouponCodeModal";
 import StoreOffersCard from "../StoreOffers/StoreOffersCard";
+import { getApiUrl } from '../../utils/api';
 
 const fetchBestDiscounts = async () => {
   try {
-    const res = await fetch("https://api.eslamoffers.com/api/Coupons/GetBestCoupons/BestDiscount");
+    const res = await fetch(getApiUrl('/Coupons/GetBestCoupons/BestDiscount'));
     if (!res.ok) throw new Error("Failed to fetch discounts");
     const data = await res.json();
     
@@ -34,7 +35,7 @@ const fetchBestDiscounts = async () => {
 
 const fetchBestOffers = async () => {
   try {
-    const res = await fetch("https://api.eslamoffers.com/api/StoreOffers/GetBestDiscountOffers");
+    const res = await fetch(getApiUrl('/StoreOffers/GetBestDiscountOffers'));
     if (!res.ok) throw new Error("Failed to fetch offers");
     const data = await res.json();
     
@@ -104,7 +105,7 @@ const BestDiscountsSlider = () => {
       setIsCopied(true);
       
       // Update last use in the backend
-      fetch(`https://api.eslamoffers.com/api/Coupons/UpdateLastUse/${modalCoupon.id}`, {
+      fetch(getApiUrl(`/Coupons/UpdateLastUse/${modalCoupon.id}`), {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json'

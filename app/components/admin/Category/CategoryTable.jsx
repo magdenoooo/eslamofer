@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { FiEdit2, FiTrash2, FiTag, FiImage, FiEye } from 'react-icons/fi';
+import { getApiUrl, getUploadsUrl } from '../../../utils/api';
 
 const CategoryTable = ({ categories, onEdit, onDelete }) => {
   const [categoryTags, setCategoryTags] = useState({});
@@ -13,7 +14,7 @@ const CategoryTable = ({ categories, onEdit, onDelete }) => {
       for (const category of categories) {
         try {
           console.log(`Loading tags for category: ${category.name} (${category.id})`);
-          const response = await fetch(`https://api.eslamoffers.com/api/Category/GetCategoryTags/${category.id}`);
+          const response = await fetch(getApiUrl(`/Category/GetCategoryTags/${category.id}`));
           if (response.ok) {
             const data = await response.json();
             console.log(`Tags response for ${category.name}:`, data);
@@ -136,7 +137,7 @@ const CategoryTable = ({ categories, onEdit, onDelete }) => {
                 <td className="py-4 px-6 whitespace-nowrap">
                   <div className="flex items-center gap-2">
                     <img
-                      src={category.iconUrl ? `https://api.eslamoffers.com/uploads/${category.iconUrl}` : '/logo.png'}
+                      src={category.iconUrl ? getUploadsUrl(category.iconUrl) : '/logo.png'}
                       alt={category.altText || category.name}
                       width={40}
                       height={40}

@@ -2,8 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Delete, Edit, Close, PersonAdd, Login, Logout } from '@mui/icons-material';
-
-const API_BASE_URL = 'https://api.eslamoffers.com/api';
+import { getApiUrl } from '../../../utils/api';
 
 const AuthAdminPanel = () => {
   // Authentication state
@@ -82,7 +81,7 @@ const AuthAdminPanel = () => {
   // Authentication functions
   const handleRegister = async () => {
     try {
-      const response = await axios.post(`${API_BASE_URL}/Authenticate/Register`, {
+      const response = await axios.post(getApiUrl('/Authenticate/Register'), {
         name: authData.name,
         email: authData.email,
         password: authData.password,
@@ -104,7 +103,7 @@ const AuthAdminPanel = () => {
 
   const handleLogin = async () => {
     try {
-      const response = await axios.post(`${API_BASE_URL}/Authenticate/Login`, {
+      const response = await axios.post(getApiUrl('/Authenticate/Login'), {
         email: loginData.email,
         password: loginData.password
       });
@@ -134,7 +133,7 @@ const AuthAdminPanel = () => {
 
   const fetchCurrentUser = async () => {
     try {
-      const response = await axios.get(`${API_BASE_URL}/Account/GetUser`);
+      const response = await axios.get(getApiUrl('/Account/GetUser'));
       setCurrentUser(response.data);
       setIsAuthenticated(true);
     } catch (error) {
@@ -145,7 +144,7 @@ const AuthAdminPanel = () => {
   // Role management functions
   const fetchRoles = async () => {
     try {
-      const response = await axios.get(`${API_BASE_URL}/Roles/GetRoles`);
+      const response = await axios.get(getApiUrl('/Roles/GetRoles'));
       setRoles(response.data);
     } catch (error) {
       showMessage('Failed to fetch roles', 'error');
@@ -154,7 +153,7 @@ const AuthAdminPanel = () => {
 
   const fetchAllUsers = async () => {
     try {
-      const response = await axios.get(`${API_BASE_URL}/Account/GetUsers`);
+      const response = await axios.get(getApiUrl('/Account/GetUsers'));
       setUsers(response.data);
     } catch (error) {
       showMessage('Failed to fetch users', 'error');
@@ -168,7 +167,7 @@ const AuthAdminPanel = () => {
         throw new Error('User not found');
       }
       
-      await axios.post(`${API_BASE_URL}/Roles/AddRolesToUser`, {
+      await axios.post(getApiUrl('/Roles/AddRolesToUser'), {
         UserId: user.id,
         RoleName: selectedRole
       }, {
@@ -188,7 +187,7 @@ const AuthAdminPanel = () => {
 
   const removeRoleFromUser = async (userId, roleName) => {
     try {
-      await axios.delete(`${API_BASE_URL}/Roles/DeleteRoleFromUser/${roleName}/${userId}`);
+      await axios.delete(getApiUrl(`/Roles/DeleteRoleFromUser/${roleName}/${userId}`));
       showMessage(`Role ${roleName} removed from user`, 'success');
       fetchAllUsers();
     } catch (error) {
@@ -199,7 +198,7 @@ const AuthAdminPanel = () => {
   // User management functions
   const handleDeleteUser = async () => {
     try {
-      await axios.delete(`${API_BASE_URL}/Account/DeleteUser/${deleteUserId}`);
+      await axios.delete(getApiUrl(`/Account/DeleteUser/${deleteUserId}`));
       showMessage('User deleted successfully', 'success');
       setOpenDeleteDialog(false);
       fetchAllUsers();

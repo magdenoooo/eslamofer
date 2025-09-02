@@ -1,4 +1,5 @@
 // Server layout for dynamic store metadata (title, description, keywords)
+import { getApiUrl } from '../../utils/api';
 
 function cleanDescription(desc) {
   if (!desc || typeof desc !== "string") return "";
@@ -14,7 +15,6 @@ function cleanDescription(desc) {
 
 export async function generateMetadata({ params }) {
   const slug = params?.slug;
-  const API_BASE = "https://api.eslamoffers.com/api";
 
   let title = "Eslam Offers";
   let description = "أفضل العروض والخصومات على الإنترنت";
@@ -40,7 +40,7 @@ export async function generateMetadata({ params }) {
   }
 
   try {
-    const storeRes = await fetch(`${API_BASE}/Store/GetStoreBySlug/${slug}`, {
+    const storeRes = await fetch(getApiUrl(`/Store/GetStoreBySlug/${slug}`), {
       cache: "no-store",
       next: { revalidate: 60 },
     });
@@ -62,7 +62,7 @@ export async function generateMetadata({ params }) {
         // Attempt to load tags to append to keywords
         try {
           if (store.id) {
-            const tagsRes = await fetch(`${API_BASE}/Store/GetStoreTags/${store.id}`, {
+            const tagsRes = await fetch(getApiUrl(`/Store/GetStoreTags/${store.id}`), {
               cache: "no-store",
               next: { revalidate: 60 },
             });

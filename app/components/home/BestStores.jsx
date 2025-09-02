@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { getApiUrl, getUploadsUrl } from '../../utils/api';
 
 const isValidHttpUrl = (string) => {
   try {
@@ -19,7 +20,7 @@ const BestStores = () => {
   useEffect(() => {
     const fetchStores = async () => {
       try {
-        const response = await fetch('https://api.eslamoffers.com/api/Store/GetBastStores/Bast');
+        const response = await fetch(getApiUrl('/Store/GetBastStores/Bast'));
         const data = await response.json();
         setStores(data);
       } catch (error) {
@@ -33,12 +34,9 @@ const BestStores = () => {
   }, []);
 
   const getSafeLogoUrl = (logoUrl) => {
-    const baseUrl = 'https://api.eslamoffers.com/uploads/';
     if (!logoUrl) return '/logo4.png';
     if (isValidHttpUrl(logoUrl)) return logoUrl;
-    const fullUrl = logoUrl.startsWith('/') ? `${baseUrl}${logoUrl}` : `${baseUrl}/${logoUrl}`;
-    return isValidHttpUrl(fullUrl) ? fullUrl : '/logo4.png';
-  };
+    const fullUrl = getUploadsUrl(logoUrl);
 
   return (
     <div className="md:px-4">

@@ -5,6 +5,7 @@ import { Autoplay } from "swiper/modules";
 import "swiper/css";
 import Image from "next/image";
 import Link from "next/link";
+import { getApiUrl, getUploadsUrl } from '../../utils/api';
 
 export default function Categories() {
   const [categories, setCategories] = useState([]);
@@ -14,7 +15,7 @@ export default function Categories() {
     const fetchCategories = async () => {
       try {
         const response = await fetch(
-          "https://api.eslamoffers.com/api/Category/GetAllCategories"
+          getApiUrl('/Category/GetAllCategories')
         );
         const data = await response.json();
         setCategories(data);
@@ -29,15 +30,12 @@ export default function Categories() {
   }, []);
 
   const getSafeIconUrl = (iconUrl) => {
-    const baseUrl = "https://api.eslamoffers.com/uploads/";
     if (!iconUrl) return "/logo4.png";
     try {
       const url = new URL(iconUrl);
       if (url.protocol === "http:" || url.protocol === "https:") return iconUrl;
     } catch (_) {}
-    const fullUrl = iconUrl.startsWith("/")
-      ? `${baseUrl}${iconUrl}`
-      : `${baseUrl}/${iconUrl}`;
+    const fullUrl = getUploadsUrl(iconUrl);
     try {
       const url = new URL(fullUrl);
       if (url.protocol === "http:" || url.protocol === "https:") return fullUrl;

@@ -7,6 +7,7 @@ import 'swiper/css/pagination';
 import Image from 'next/image';
 import Link from 'next/link';
 import BestStores from './BestStores';
+import { getApiUrl, getUploadsUrl } from '../../utils/api';
 
 const Hero = () => {
   const [banners, setBanners] = useState([]);
@@ -15,7 +16,7 @@ const Hero = () => {
   useEffect(() => {
     const fetchBanners = async () => {
       try {
-        const response = await fetch('https://api.eslamoffers.com/api/Banner/GetAllBanners');
+        const response = await fetch(getApiUrl('/Banner/GetAllBanners'));
         const data = await response.json();
         // فلترة البانرات التي لها صور فقط
         const validBanners = data.filter(banner => banner.imageUrl);
@@ -34,7 +35,7 @@ const Hero = () => {
 
   const getBannerImageUrl = (imageUrl) => {
     if (!imageUrl) return '';
-    return `https://api.eslamoffers.com/uploads/${imageUrl}`;
+    return getUploadsUrl(imageUrl);
   };
 
   const renderBannerContent = (banner) => {

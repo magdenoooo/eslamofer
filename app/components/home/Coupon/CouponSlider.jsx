@@ -7,11 +7,12 @@ import CouponCard from "../../coupons/CouponCard";
 import CouponCodeModal from "./CouponCodeModal";
 import Link from "next/link";
 import StoreOffersCard from "../../StoreOffers/StoreOffersCard";
+import { getApiUrl } from '../../../utils/api';
 
 const fetchBestCoupons = async () => {
   try {
     const res = await fetch(
-      "https://api.eslamoffers.com/api/Coupons/GetBestCoupons/Best"
+      getApiUrl('/Coupons/GetBestCoupons/Best')
     );
     if (!res.ok) throw new Error("Failed to fetch coupons");
     const data = await res.json();
@@ -31,7 +32,7 @@ const fetchBestCoupons = async () => {
 const fetchStoreOffers = async () => {
   try {
     const res = await fetch(
-      "https://api.eslamoffers.com/api/StoreOffers/GetTheBestOffers"
+      getApiUrl('/StoreOffers/GetTheBestOffers')
     );
     if (!res.ok) throw new Error("Failed to fetch store offers");
     const data = await res.json();
@@ -88,7 +89,7 @@ const CombinedSlider = () => {
       navigator.clipboard.writeText(modalCoupon.couponCode);
       setIsCopied(true);
       
-      fetch(`https://api.eslamoffers.com/api/Coupons/UpdateLastUse/${modalCoupon.id}`, {
+      fetch(getApiUrl(`/Coupons/UpdateLastUse/${modalCoupon.id}`), {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json'

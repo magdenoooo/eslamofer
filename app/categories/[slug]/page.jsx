@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
+import { getApiUrl, getUploadsUrl } from '../../utils/api';
 
 export default function CategoryPage() {
   const { slug } = useParams();
@@ -24,7 +25,7 @@ export default function CategoryPage() {
         setError(null);
 
         const storesRes = await fetch(
-          `https://api.eslamoffers.com/api/Store/GetStoresByCategory/${slug}`
+          getApiUrl(`/Store/GetStoresByCategory/${slug}`)
         );
         
         if (!storesRes.ok) {
@@ -90,7 +91,7 @@ className="bg-white border-2 border-gray-300 border-dashed hover:border-teal-400
             <Link href={`/stores/${store.slug || store.id}`} prefetch={false}>
               <div className="relative    h-[80] w-full">
                 <Image
-                  src={store.logoUrl ? `https://api.eslamoffers.com/uploads/${store.logoUrl}` : '/default-store.png'}
+                  src={store.logoUrl ? getUploadsUrl(store.logoUrl) : '/default-store.png'}
                   alt={store.altText || store.name}
                   fill
           className="   group-hover:scale-110 transition-transform duration-300 w-[200] h-[80px]"

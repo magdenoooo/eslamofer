@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect, useRef } from "react";
 import { FiXCircle, FiImage, FiTrash2, FiPlus, FiEdit2, FiCheck, FiX } from "react-icons/fi";
+import { getApiUrl, getUploadsUrl } from '../../../utils/api';
 
 const StoreDescriptionsModal = ({ isOpen, onClose, store, token, onUpdate }) => {
   const [descriptions, setDescriptions] = useState([]);
@@ -33,7 +34,7 @@ const StoreDescriptionsModal = ({ isOpen, onClose, store, token, onUpdate }) => 
     setLoading(true);
     try {
       try {
-        const response = await fetch(`https://api.eslamoffers.com/api/Store/GetStoreDescriptions/${store.id}`, {
+        const response = await fetch(getApiUrl(`/Store/GetStoreDescriptions/${store.id}`), {
           headers: {
             accept: "*/*",
             Authorization: `Bearer ${token}`,
@@ -97,7 +98,7 @@ const StoreDescriptionsModal = ({ isOpen, onClose, store, token, onUpdate }) => 
         formData.append("Image", currentDescription.image);
       }
       
-      const response = await fetch(`https://api.eslamoffers.com/api/Store/AddDescriptionStore/${store.id}`, {
+      const response = await fetch(getApiUrl(`/Store/AddDescriptionStore/${store.id}`), {
         method: 'POST',
         headers: {
           'accept': '*/*',
@@ -141,7 +142,7 @@ const StoreDescriptionsModal = ({ isOpen, onClose, store, token, onUpdate }) => 
         formData.append("Image", currentDescription.image);
       }
       
-      const response = await fetch(`https://api.eslamoffers.com/api/Store/UpdateDescriptionStore/${store.id}/${descId}`, {
+      const response = await fetch(getApiUrl(`/Store/UpdateDescriptionStore/${store.id}/${descId}`), {
         method: 'PUT',
         headers: {
           'accept': '*/*',
@@ -196,7 +197,7 @@ const StoreDescriptionsModal = ({ isOpen, onClose, store, token, onUpdate }) => 
     if (deleteConfirm.descId === null || deleteConfirm.descIndex === null) return;
     
     try {
-      const response = await fetch(`https://api.eslamoffers.com/api/Store/DeleteDescriptionStore/${store.id}/${deleteConfirm.descId}`, {
+      const response = await fetch(getApiUrl(`/Store/DeleteDescriptionStore/${store.id}/${deleteConfirm.descId}`), {
         method: 'DELETE',
         headers: {
           'accept': '*/*',
@@ -250,7 +251,7 @@ const StoreDescriptionsModal = ({ isOpen, onClose, store, token, onUpdate }) => 
   const getImageSrc = (url) => {
     if (!url) return null;
     if (url.startsWith('blob:') || url.startsWith('data:')) return url;
-    return `https://api.eslamoffers.com/uploads/${url}`;
+    return getUploadsUrl(url);
   };
 
   if (!isOpen) return null;

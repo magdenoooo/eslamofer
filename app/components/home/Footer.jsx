@@ -17,6 +17,7 @@ import {
   FaPhone,
   FaWhatsapp,
 } from "react-icons/fa";
+import { getApiUrl } from '../../utils/api';
 
 const Footer = () => {
   const [popularStores, setPopularStores] = useState([]);
@@ -26,7 +27,7 @@ const Footer = () => {
     const fetchPopularStores = async () => {
       try {
         const response = await fetch(
-          "https://api.eslamoffers.com/api/Store/GetBastStores/Bast"
+          getApiUrl('/Store/GetBastStores/Bast')
         );
         const data = await response.json();
         setPopularStores(data.slice(0, 6));

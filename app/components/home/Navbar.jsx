@@ -6,6 +6,7 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useRouter } from "next/router";
 import { GoTriangleUp } from "react-icons/go";
+import { getApiUrl, getUploadsUrl } from '../../utils/api';
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -18,7 +19,7 @@ const Navbar = () => {
 
   // جلب بيانات المتاجر مرة واحدة
   useEffect(() => {
-    fetch("https://api.eslamoffers.com/api/Store/GetAllStores")
+    fetch(getApiUrl('/Store/GetAllStores'))
       .then((res) => res.json())
       .then((data) => setStores(data));
   }, []);
@@ -154,7 +155,7 @@ const Navbar = () => {
                       onClick={() => window.location.assign(`/stores/${store.slug}`)}
                     >
                       <img
-                        src={`https://api.eslamoffers.com/uploads/${store.logoUrl}`}
+                        src={getUploadsUrl(store.logoUrl)}
                         alt={store.name}
                         className="w-12 h-12 object-contain rounded-lg transition-transform duration-200 group-hover:scale-110 shadow-sm border border-gray-200"
                       />

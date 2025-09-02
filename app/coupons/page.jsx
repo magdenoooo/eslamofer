@@ -6,6 +6,7 @@ import PromoCard from "../components/home/Coupon/PromoCard";
 import CountdownOfferBox from "../components/home/Coupon/CountdownOfferBox";
 import CategorySkeletonLoader from "../components/coupons/CategorySkeletonLoader";
 import BestStores from "../components/home/BestStores";
+import { getApiUrl } from '../utils/api';
 
 export default function CouponsPage() {
   const [coupons, setCoupons] = useState([]);
@@ -17,7 +18,7 @@ export default function CouponsPage() {
     const fetchCoupons = async () => {
       try {
         const res = await fetch(
-          "https://api.eslamoffers.com/api/Coupons/GetAllCoupons"
+          getApiUrl('/Coupons/GetAllCoupons')
         );
         const data = await res.json();
 

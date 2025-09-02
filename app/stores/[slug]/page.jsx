@@ -9,6 +9,7 @@ import CountdownOfferBox from "../../components/home/Coupon/CountdownOfferBox";
 import BestStores from "../../components/home/BestStores";
 import StoreOffersCard from "../../components/StoreOffers/StoreOffersCard";
 import Image from "next/image";
+import { getApiUrl, getUploadsUrl } from '../../utils/api';
 
 const StoreCouponsPage = () => {
   const [store, setStore] = useState(null);
@@ -23,7 +24,7 @@ const StoreCouponsPage = () => {
   const fetchCategories = useCallback(async () => {
     try {
       const response = await axios.get(
-        "https://api.eslamoffers.com/api/Category/GetAllCategories"
+        getApiUrl('/Category/GetAllCategories')
       );
       setCategories(response.data);
     } catch (error) {
@@ -39,7 +40,7 @@ const StoreCouponsPage = () => {
     try {
       // جلب بيانات المتجر أولاً
       const storeResponse = await axios.get(
-        `https://api.eslamoffers.com/api/Store/GetStoreBySlug/${slug}`,
+        getApiUrl(`/Store/GetStoreBySlug/${slug}`),
         {
           validateStatus: function (status) {
             return status < 500; // Resolve only if the status code is less than 500
@@ -65,7 +66,7 @@ const StoreCouponsPage = () => {
       let couponsData = [];
       try {
         const couponsResponse = await axios.get(
-          `https://api.eslamoffers.com/api/Coupons/GetCouponsByStore/${slug}`,
+          getApiUrl(`/Coupons/GetCouponsByStore/${slug}`),
           {
             validateStatus: (status) => status < 500
           }
@@ -84,7 +85,7 @@ const StoreCouponsPage = () => {
       // جلب العروض وتصفيتها حسب المتجر
       try {
         const offersResponse = await axios.get(
-          "https://api.eslamoffers.com/api/StoreOffers/GetAllOffers",
+          getApiUrl('/StoreOffers/GetAllOffers'),
           {
             validateStatus: (status) => status < 500
           }
@@ -127,7 +128,7 @@ const StoreCouponsPage = () => {
     if (store.logoUrl.startsWith("http") || store.logoUrl.startsWith("https")) {
       return store.logoUrl;
     }
-    return `https://api.eslamoffers.com/uploads/${store.logoUrl}`;
+    return getUploadsUrl(store.logoUrl);
   }, [store]);
 
   const getCategoryName = useCallback(
@@ -389,7 +390,7 @@ const StoreCouponsPage = () => {
                     {desc.image && (
 <div className="relative w-full rounded-lg overflow-hidden shadow-sm flex justify-center">
   <Image
-    src={`https://api.eslamoffers.com/uploads/${desc.image}`}
+    src={getUploadsUrl(desc.image)}
     alt={desc.altText || `صورة توضيحية ${index + 1}`}
     width={0}
     height={0}

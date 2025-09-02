@@ -1,4 +1,6 @@
 // app/sitemap.xml/route.ts
+import { getApiUrl } from '../utils/api';
+
 export const revalidate = 86400; 
 export const dynamic = "force-static";
 
@@ -44,10 +46,9 @@ ${nodes}
 
 async function fetchApiSitemap(): Promise<UrlEntry[]> {
   const SITE_URL = process.env.SITE_URL ?? "https://eslamoffers.com";
-  const API_BASE = process.env.API_BASE ?? "https://api.eslamoffers.com";
 
   try {
-    const response = await fetch(`${API_BASE}/sitemap.xml`, {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL || 'https://api.eslamoffers.com/api'}/../sitemap.xml`, {
       next: { revalidate: 86400 } // Cache for 24 hours
     });
 
@@ -60,7 +61,7 @@ async function fetchApiSitemap(): Promise<UrlEntry[]> {
 
     return urls.map(url => ({
       ...url,
-      loc: url.loc.replace(API_BASE, SITE_URL)
+      loc: url.loc.replace(process.env.NEXT_PUBLIC_API_BASE_URL?.replace('/api', '') || 'https://api.eslamoffers.com', SITE_URL)
     }));
 
   } catch (error) {

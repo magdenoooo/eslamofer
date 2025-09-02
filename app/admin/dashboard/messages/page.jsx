@@ -12,6 +12,7 @@ import {
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useRouter } from "next/navigation";
+import { getApiUrl } from '../../../utils/api';
 
 export default function AdminFeedbackPage() {
   const [feedbacks, setFeedbacks] = useState([]);
@@ -47,7 +48,7 @@ export default function AdminFeedbackPage() {
   const fetchFeedbacks = async (token) => {
     try {
       setLoading(true);
-      const response = await fetch('https://api.eslamoffers.com/api/Feedback/GetFeedBack', {
+      const response = await fetch(getApiUrl('/Feedback/GetFeedBack'), {
         method: 'GET',
         headers: {
           'accept': '*/*',
@@ -81,7 +82,7 @@ export default function AdminFeedbackPage() {
 
     setIsDeleting(true);
     try {
-      const response = await fetch(`https://api.eslamoffers.com/api/Feedback/DeleteMessage/${id}`, {
+      const response = await fetch(getApiUrl(`/Feedback/DeleteMessage/${id}`), {
         method: 'DELETE',
         headers: {
           'accept': '*/*',

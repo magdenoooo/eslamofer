@@ -7,6 +7,7 @@ import Toast from '../../../components/admin/Store/Toast';
 import { FaPlus } from 'react-icons/fa';
 import { FiPlus } from 'react-icons/fi';
 import { useRouter } from 'next/navigation';
+import { getApiUrl } from '../../../utils/api';
 
 const CategoryPage = () => {
   const [categories, setCategories] = useState([]);
@@ -17,8 +18,6 @@ const CategoryPage = () => {
   const [toast, setToast] = useState({ show: false, message: '', type: '' });
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
-
-  const API_URL = 'https://api.eslamoffers.com/api/Category';
 
   // Function to get token from cookies
   const getToken = () => {
@@ -40,7 +39,7 @@ const CategoryPage = () => {
     }
 
     try {
-      const response = await fetch('https://api.eslamoffers.com/api/Category/GetAllCategories', {
+      const response = await fetch(getApiUrl('/Category/GetAllCategories'), {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -112,7 +111,7 @@ const CategoryPage = () => {
     }
 
     try {
-      const response = await fetch(`${API_URL}/DeleteCategory/${categoryToDelete}`, {
+      const response = await fetch(getApiUrl(`/Category/DeleteCategory/${categoryToDelete}`), {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`
@@ -147,8 +146,8 @@ const CategoryPage = () => {
 
     const method = category.id ? 'PUT' : 'POST';
     const url = category.id
-      ? `${API_URL}/UpdateCategory/${category.id}`
-      : `${API_URL}/AddCategory`;
+      ? getApiUrl(`/Category/UpdateCategory/${category.id}`)
+      : getApiUrl('/Category/AddCategory');
       
     try {
       const formData = new FormData();
@@ -182,7 +181,7 @@ const CategoryPage = () => {
         const categoryId = category.id;
         try {
           if (!categoryId) {
-            // For new categories, we need to get the ID from the response
+          const response = await fetch(getApiUrl(`/Category/AddTagsToCategory/${categoryId}?tags=${encodeURIComponent(tags)}`), {
             const responseData = await response.json();
             if (responseData.id) {
               console.log('New category created with ID:', responseData.id);
@@ -243,7 +242,7 @@ const CategoryPage = () => {
 
     try {
       console.log(`Updating tags for category ${categoryId}:`, tags);
-      const response = await fetch(`${API_URL}/UpdateCategoryTag/${categoryId}?tags=${encodeURIComponent(tags)}`, {
+      const response = await fetch(getApiUrl(`/Category/UpdateCategoryTag/${categoryId}?tags=${encodeURIComponent(tags)}`), {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${token}`

@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
+import { getApiUrl, getUploadsUrl } from '../../../utils/api';
 
 const StoreOffersDashboard = () => {
   const router = useRouter();
@@ -28,9 +29,6 @@ const StoreOffersDashboard = () => {
   const [isEditing, setIsEditing] = useState(false);
   
   // رابط API الأساسي
-  const API_BASE_URL = 'https://api.eslamoffers.com/api';
-  const UPLOADS_BASE_URL = 'https://api.eslamoffers.com/uploads/';
-
   // الحصول على التوكن من الكوكيز
   const getTokenFromCookies = () => {
     if (typeof window === 'undefined') return '';
@@ -49,7 +47,7 @@ const StoreOffersDashboard = () => {
 
   // تكوين نسخة axios
   const api = axios.create({
-    baseURL: API_BASE_URL,
+    baseURL: process.env.NEXT_PUBLIC_API_BASE_URL || 'https://api.eslamoffers.com/api',
     headers: {
       'Authorization': `Bearer ${getTokenFromCookies()}`,
       'Content-Type': 'multipart/form-data'
@@ -380,7 +378,7 @@ const StoreOffersDashboard = () => {
                   {logoPreview && (
                     <div className="relative group">
                       <img 
-                        src={logoPreview} 
+                        src={offer.logoUrl.includes('http') ? offer.logoUrl : getUploadsUrl(offer.logoUrl)} 
                         alt="معاينة الشعار" 
                         className="h-32 w-32 object-contain rounded-lg border border-gray-200" 
                       />

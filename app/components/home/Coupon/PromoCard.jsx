@@ -9,6 +9,7 @@ import "swiper/css";
 import "swiper/css/effect-cards";
 import Link from "next/link";
 import Image from "next/image";
+import { getApiUrl, getUploadsUrl } from '../../../utils/api';
 
 const PromoCard = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -30,7 +31,7 @@ const PromoCard = () => {
     setIsClient(true);
     const fetchOffers = async () => {
       try {
-        const res = await fetch('https://api.eslamoffers.com/api/Offers/GetAllOffers');
+        const res = await fetch(getApiUrl('/Offers/GetAllOffers'));
         const data = await res.json();
         const lastFiveOffers = data.slice(0, 5);
         setOffers(lastFiveOffers);
@@ -60,7 +61,7 @@ const PromoCard = () => {
   const getImageSrc = (url) => {
     if (!url) return '/default-product.png';
     if (url.startsWith('http')) return url;
-    return `https://api.eslamoffers.com/uploads/${url}`;
+    return getUploadsUrl(url);
   };
 
   const calculateOriginalPrice = (price, discount) => {

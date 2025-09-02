@@ -2,8 +2,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import { Delete, Edit, Add, Close, CloudUpload } from '@mui/icons-material';
-
-const API_BASE_URL = 'https://api.eslamoffers.com/api';
+import { getApiUrl, getUploadsUrl } from '../../../utils/api';
 
 export default function BannerManagement() {
   // State for banners
@@ -90,7 +89,7 @@ export default function BannerManagement() {
   const fetchBanners = async () => {
     try {
       setLoading(true);
-      const response = await axios.get(`${API_BASE_URL}/Banner/GetAllBanners`);
+      const response = await axios.get(getApiUrl('/Banner/GetAllBanners'));
       setBanners(response.data);
     } catch (error) {
       showMessage('Failed to fetch banners', 'error');
@@ -101,7 +100,7 @@ export default function BannerManagement() {
   
   const fetchStores = async () => {
     try {
-      const response = await axios.get(`${API_BASE_URL}/Store/GetAllStores`);
+      const response = await axios.get(getApiUrl('/Store/GetAllStores'));
       setStores(response.data);
     } catch (error) {
       showMessage('Failed to fetch stores', 'error');
@@ -176,7 +175,7 @@ export default function BannerManagement() {
       formData.append('Link', bannerData.link);
       formData.append('Priority', bannerData.priority);
       
-      await axios.post(`${API_BASE_URL}/Banner/AddBanner`, formData);
+      await axios.post(getApiUrl('/Banner/AddBanner'), formData);
       showMessage('Banner added successfully', 'success');
       resetForm();
       fetchBanners();
@@ -196,7 +195,7 @@ export default function BannerManagement() {
       formData.append('Link', bannerData.link);
       formData.append('Priority', bannerData.priority);
       
-      await axios.put(`${API_BASE_URL}/Banner/UpdateBanner/${editBannerId}`, formData);
+      await axios.put(getApiUrl(`/Banner/UpdateBanner/${editBannerId}`), formData);
       showMessage('Banner updated successfully', 'success');
       resetForm();
       fetchBanners();
@@ -208,7 +207,7 @@ export default function BannerManagement() {
   
   const handleDeleteBanner = async () => {
     try {
-      await axios.delete(`${API_BASE_URL}/Banner/DeleteBanner/${deleteBannerId}`);
+      await axios.delete(getApiUrl(`/Banner/DeleteBanner/${deleteBannerId}`));
       showMessage('Banner deleted successfully', 'success');
       setOpenDeleteDialog(false);
       fetchBanners();
@@ -497,7 +496,7 @@ export default function BannerManagement() {
                       {banner.imageUrl ? (
                         <div className="relative group w-[150px]">
                           <img 
-                            src={`https://api.eslamoffers.com/uploads/${banner.imageUrl}`} 
+                            src={getUploadsUrl(banner.imageUrl)} 
                             alt={banner.altText || 'بصري إعلاني'} 
                             className="h-16 rounded-lg w-[300px] border border-gray-200"
                           />

@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import SubscribeBox from '../components/home/Coupon/SubscribeBox';
 import CountdownOfferBox from '../components/home/Coupon/CountdownOfferBox';
 import PromoCard from '../components/home/Coupon/PromoCard';
+import { getApiUrl } from '../utils/api';
 
 const SitemapPage = () => {
   const [sitemapData, setSitemapData] = useState([]);
@@ -13,7 +14,7 @@ const SitemapPage = () => {
   useEffect(() => {
     const fetchSitemap = async () => {
       try {
-        const res = await fetch('https://api.eslamoffers.com/sitemap.xml', {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL?.replace('/api', '') || 'https://api.eslamoffers.com'}/sitemap.xml`, {
           next: { revalidate: 3600 }
         });
 
@@ -99,7 +100,7 @@ const SitemapPage = () => {
                         className="hover:underline hover:text-[#0d9488] transition-colors"
                         title={item.loc}
                       >
-                        {item.loc.replace('https://api.eslamoffers.com', '') || '/'}
+                        {item.loc.replace(process.env.NEXT_PUBLIC_API_BASE_URL?.replace('/api', '') || 'https://api.eslamoffers.com', '') || '/'}
                       </a>
                     </td>
                   </tr>
